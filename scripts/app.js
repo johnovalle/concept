@@ -6,6 +6,7 @@ var assetsLoaded = 0;
 var assetsToLoad = [];
 var sprites = [];
 
+
 var image = new Image();
 image.src = "../imgs/spritesheet.png";
 image.addEventListener('load', loadHandler);
@@ -14,6 +15,7 @@ image.addEventListener('load', loadHandler);
 //define game states
 var game = {
     state: gameStates.loading,
+    currentMap: 0,
     playing: function(){},
     buildMap: function(){},
     gameOver: function(){}
@@ -26,7 +28,9 @@ function update(){
             console.log("Loading...");
             break;
         case gameStates.buildingMap:
-            game.buildMap(); //pass the map
+            game.buildMap(maps.levels[game.currentMap]); //pass the map
+            game.buildMap(maps.objects[game.currentMap]);
+            game.state = gameStates.playing;
             break;
         case gameStates.playing:
             game.playing();

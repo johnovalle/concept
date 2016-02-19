@@ -23,4 +23,5 @@ function makeSprite(image, template){
     buildSprite.sourceY = template.sourceY;
     buildSprite.sourceW = template.sourceW;
     buildSprite.sourceH = template.sourceH;
+    return buildSprite;
 };
