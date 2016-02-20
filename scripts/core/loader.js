@@ -1,7 +1,8 @@
 //asset loader
-function loadHandler(){
-    assetsLoaded++;
-    if(assetsToLoad.length === assetsLoaded){
-        game.state = gameStates.buildingMap;
+function loadHandler(game, stateMap){
+    game.assetsLoaded++;
+    if(game.assetsToLoad.length === game.assetsLoaded){
+        console.log("all assets loaded");
+        game.state = stateMap.buildingMap;
     }
 }

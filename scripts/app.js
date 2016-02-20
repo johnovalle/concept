@@ -1,25 +1,35 @@
 //main app file
-var canvas = document.getElementById('#canvas');
+var canvas = document.getElementById('canvas');
+canvas.width = maps.levels[0][0].length * tileList.size;
+canvas.height = maps.levels[0].length * tileList.size;
 var context = canvas.getContext('2d');
 //load assets
-var assetsLoaded = 0;
-var assetsToLoad = [];
-var sprites = [];
-
-
-var image = new Image();
-image.src = "../imgs/spritesheet.png";
-image.addEventListener('load', loadHandler);
-
-
 //define game states
 var game = {
+    sprites: [],
+    assetsLoaded: 0,
+    assetsToLoad: [],
     state: gameStates.loading,
     currentMap: 0,
-    playing: function(){},
-    buildMap: function(){},
+    playing: function(){
+        render(this.sprites, context);
+    },
+    createMap: function(map){
+        buildMap(map,tileList, image, this.sprites);
+    },
     gameOver: function(){}
 };
+
+var image = new Image();
+image.src = "images/timeBombPanic.png";
+game.assetsToLoad.push(image);
+image.addEventListener('load', function(){
+    console.log("here");
+    loadHandler(game, gameStates);
+});
+
+
+
 
 function update(){
     requestAnimationFrame(update);
@@ -28,8 +38,8 @@ function update(){
             console.log("Loading...");
             break;
         case gameStates.buildingMap:
-            game.buildMap(maps.levels[game.currentMap]); //pass the map
-            game.buildMap(maps.objects[game.currentMap]);
+            game.createMap(maps.levels[game.currentMap]); //pass the map
+            game.createMap(maps.objects[game.currentMap]);
             game.state = gameStates.playing;
             break;
         case gameStates.playing:
