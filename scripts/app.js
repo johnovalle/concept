@@ -11,7 +11,17 @@ var game = {
     assetsToLoad: [],
     state: gameStates.loading,
     currentMap: 0,
+    avatar: null,
+    wall: [],
+    bomb: [],
     playing: function(){
+        checkPlayerMove();
+        updateSpritePositions();
+        checkBoundries();
+        for(var i = 0; i<game.wall.length; i++){
+            console.log(blockRectangle(game.avatar,game.wall[i]));
+        }
+
         render(this.sprites, context);
     },
     createMap: function(map){
@@ -28,11 +38,56 @@ image.addEventListener('load', function(){
     loadHandler(game, gameStates);
 });
 
+function checkPlayerMove(){
+    if(keyMap.up && !keyMap.down){
+        game.avatar.vy = -4;
+    }
+    if(keyMap.down && !keyMap.up){
+        game.avatar.vy = 4;
+    }
+    if(keyMap.up === keyMap.down){
+        game.avatar.vy = 0;
+    }
+    if(keyMap.left && !keyMap.right){
+        game.avatar.vx = -4;
+    }
+    if(keyMap.right && !keyMap.left){
+        game.avatar.vx = 4;
+    }
+    if(keyMap.left === keyMap.right){
+        game.avatar.vx = 0;
+    }
+}
+function updateSpritePositions(){
+    for(var i = 0; i < game.sprites.length; i++){
+        var sprite = game.sprites[i];
+        sprite.x += sprite.vx;
+        sprite.y += sprite.vy;
+    }
+}
+function checkBoundries(){
+    for(var i = 0; i < game.sprites.length; i++){
+        var sprite = game.sprites[i];
+        if(sprite.x < 0){
+            sprite.x = 0;
+        }
+        else if(sprite.x > canvas.width - sprite.width){
+            sprite.x = canvas.width - sprite.width;
+        }
 
-
+        if(sprite.y < 0){
+            sprite.y = 0;
+        }
+        else if(sprite.y > canvas.height - sprite.height){
+            sprite.y = canvas.height - sprite.height;
+        }
+    }
+}
+window.addEventListener("keydown", keyDownHandler);
+window.addEventListener("keyup", keyUpHandler);
 
 function update(){
-    requestAnimationFrame(update);
+    requestAnimationFrame(update, canvas);
     switch(game.state){
         case gameStates.loading:
             console.log("Loading...");

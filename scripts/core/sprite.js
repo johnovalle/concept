@@ -13,7 +13,24 @@ var spriteObject = {
     vx: 0,
     vy: 0,
     visible: true,
-    rotation: 0
+    rotation: 0,
+    //Getters
+    centerX: function()
+    {
+        return this.x + (this.width / 2);
+    },
+    centerY: function()
+    {
+        return this.y + (this.height / 2);
+    },
+    halfWidth: function()
+    {
+        return this.width / 2;
+    },
+    halfHeight: function()
+    {
+        return this.height / 2;
+    }
 };
 
 function makeSprite(image, template){
@@ -23,5 +40,6 @@ function makeSprite(image, template){
     buildSprite.sourceY = template.sourceY;
     buildSprite.sourceW = template.sourceW;
     buildSprite.sourceH = template.sourceH;
+
     return buildSprite;
 };
