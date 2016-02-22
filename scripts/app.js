@@ -1,7 +1,7 @@
 //main app file
 var canvas = document.getElementById('canvas');
-canvas.width = maps.levels[0][0].length * tileList.size;
-canvas.height = maps.levels[0].length * tileList.size;
+canvas.width = maps.levels[0][0].length * tileList.size * 4;
+canvas.height = maps.levels[0].length * tileList.size * 4;
 var context = canvas.getContext('2d');
 //load assets
 //define game states
@@ -14,12 +14,22 @@ var game = {
     avatar: null,
     wall: [],
     bomb: [],
+    bombsDefused: 0,
     playing: function(){
         checkPlayerMove();
         updateSpritePositions();
         checkBoundries();
         for(var i = 0; i<game.wall.length; i++){
-            console.log(blockRectangle(game.avatar,game.wall[i]));
+            blockRectangle(game.avatar,game.wall[i]);
+        }
+        for(var i = 0; i < game.bomb.length; i++){
+            if(hitTestCircle(game.avatar, game.bomb[i]) && game.bomb[i].visible){
+                game.bomb[i].visible = false;
+                game.bombsDefused++;
+            }
+        }
+        if(game.bombsDefused === game.bomb.length){
+            game.state = gameStates.gameOver;
         }
 
         render(this.sprites, context);
@@ -27,11 +37,13 @@ var game = {
     createMap: function(map){
         buildMap(map,tileList, image, this.sprites);
     },
-    gameOver: function(){}
+    gameOver: function(){
+        console.log("game over man...");
+    }
 };
 
 var image = new Image();
-image.src = "images/timeBombPanic.png";
+image.src = "images/tilesheet.png";
 game.assetsToLoad.push(image);
 image.addEventListener('load', function(){
     console.log("here");

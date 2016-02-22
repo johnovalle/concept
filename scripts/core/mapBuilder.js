@@ -8,8 +8,8 @@ function buildMap(map,tileList, sheet, sprites){ //probably should just pass the
 			var cell = map[row][column];
 			if(cell !== 0){
 				var curTile = makeSprite(sheet, tileList[cell-1]);
-				curTile.x = column * tileList.size; //where to get size from
-				curTile.y = row * tileList.size; // same
+				curTile.x = column * tileList.size * 4; //where to get size from
+				curTile.y = row * tileList.size * 4; // same
 				sprites.push(curTile);
                 if(tileList[cell-1].type){
                     if(tileList[cell-1].type === "avatar"){
